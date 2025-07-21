@@ -9,3 +9,8 @@ env/
 *.code-workspace
 *.sha256
 terraform.tfstate
+__pycache__/
+.env
+.pytest_cache
+.ruff_cache
+.python-version
