@@ -71,6 +71,7 @@ def trigger_dms_instance():
 
 @then('I validate the DMS extraction')
 def validate_dms_output():
+	# TODO This step is dependant on another ticket JIRA: ELM-3925
 	local_file = 'path'
 	s3_dataframe = download_file(bucket='Bucket', key='key')
 	local_dataframe = pd.read_parquet(local_file)
