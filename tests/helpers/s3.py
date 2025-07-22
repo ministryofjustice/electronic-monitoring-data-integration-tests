@@ -1,4 +1,6 @@
 import boto3
+import pandas as pd
+import io
 
 
 def upload_test_file(local_file_path: str, bucket_name: str, target_file_name: str):
@@ -11,6 +13,22 @@ def upload_test_file(local_file_path: str, bucket_name: str, target_file_name: s
 	"""
 	client = __s3_client()
 	client.upload_file(local_file_path, bucket_name, target_file_name)
+
+
+def download_file(bucket: str, key: str) -> pd.DataFrame:
+	"""Downloads file and returns a pandas dataframe.
+
+	Args:
+		bucket (str): Target Bucket
+		key (str): file key to read
+
+	Returns:
+		pd.DataFrame: Pandas Dataframe
+	"""
+
+	client = __s3_client()
+	file = client.get_object(Bucket=bucket, Key=key)
+	return pd.read_parquet(io.BytesIO(file['Body'].read()))
 
 
 def __s3_client():

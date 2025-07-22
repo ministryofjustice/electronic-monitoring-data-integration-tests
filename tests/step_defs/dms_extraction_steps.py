@@ -1,10 +1,12 @@
 from pytest_bdd import scenarios, given, when, then
-from helpers.s3 import upload_test_file
+from helpers.s3 import upload_test_file, download_file
 from helpers.rds_connection import ConnectToRDS
 from helpers.dms import start_dms_task_instance, check_dms_task_status
 import os
 import time
 import logging
+import pandas as pd
+from pandas.testing import assert_frame_equal
 
 
 scenarios('../features/dms_extraction.feature')
@@ -69,4 +71,11 @@ def trigger_dms_instance():
 
 @then('I validate the DMS extraction')
 def validate_dms_output():
-	pass
+	local_file = 'path'
+	s3_dataframe = download_file(bucket='Bucket', key='key')
+	local_dataframe = pd.read_parquet(local_file)
+
+	s3_dataframe = s3_dataframe.reindex(sorted(s3_dataframe.columns), axis=1)
+	local_dataframe = local_dataframe.reindex(sorted(local_dataframe.columns), axis=1)
+
+	assert_frame_equal(local_dataframe, s3_dataframe)
