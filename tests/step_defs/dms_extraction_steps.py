@@ -49,7 +49,7 @@ def ingest_test_data_into_rds(restore_sql, tasks_sql):
 			raise RuntimeError(f'Failed to restore backup on RDS - Task_id: {task_id}')
 
 		if count >= 15:
-			raise TimeoutError(f'Failed to restore backup within adequate time: {count * 5}(s)')
+			raise TimeoutError(f'Failed to restore backup within adequate time: {count * 15}(s)')
 
 		time.sleep(15)
 		count += 1
