@@ -134,4 +134,4 @@ class ConnectToRDS(DatabaseConnection):
 		"""
 		yield
 		with self.get_cursor() as cursor:
-			cursor.execute('DELETE FROM YourTestTable WHERE ...')
+			cursor.execute('TBD based on test data upload')
