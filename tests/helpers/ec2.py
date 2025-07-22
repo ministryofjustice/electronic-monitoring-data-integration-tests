@@ -18,7 +18,6 @@ def retrieve_instance_id(instance_name: str) -> str:
 
 	instance_id = None
 	for instance in ec2_instances:
-		# This will get the last instance ID if multiple instances share the same name
 		instance_id = instance.id
 
 	if instance_id is None:
