@@ -31,6 +31,31 @@ def download_file(bucket: str, key: str) -> pd.DataFrame:
 	return pd.read_parquet(io.BytesIO(file['Body'].read()))
 
 
+def dynamically_retrieve_bucket(search_string: str) -> str:
+	"""Finds a single S3 bucket by a substring.
+
+	Args:
+	    search_string (str): The substring to search for within S3 bucket names.
+
+	Returns:
+	    str: The name of the unique bucket found.
+
+	Raises:
+	    LookupError: If no bucket name contains the search_string.
+	    ValueError: If multiple bucket names contain the search_string.
+	"""
+
+	all_buckets = boto3.client('s3').list_buckets()['Buckets']
+	matching_buckets = [bucket['Name'] for bucket in all_buckets if search_string in bucket['Name']]
+
+	if not matching_buckets:
+		raise LookupError(f"No Bucket found containing '{search_string}'")
+	elif len(matching_buckets) > 1:
+		raise ValueError(f"Multiple buckets found containing '{search_string}': {matching_buckets}")
+	else:
+		return matching_buckets[0]
+
+
 def __s3_client():
 	"""Creates and returns a boto3 S3 client.
 

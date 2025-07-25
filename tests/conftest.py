@@ -24,3 +24,8 @@ def restore_sql():
         @s3_arn_to_restore_from='{arn:}',
         @with_norecovery=0,
         @type='FULL';"""
+
+
+@pytest.fixture
+def context():
+	return {}

@@ -1,5 +1,5 @@
 from pytest_bdd import scenarios, given, when, then
-from helpers.s3 import upload_test_file, download_file
+from helpers.s3 import upload_test_file, download_file, dynamically_retrieve_bucket
 from helpers.rds_connection import ConnectToRDS
 from helpers.dms import start_dms_task_instance, check_dms_task_status
 import os
@@ -18,24 +18,25 @@ def activate_ssh_tunnel(create_ssh_tunnel_to_ec2_bastion):
 
 
 @given('I have uploaded the .bak files into s3')
-def upload_dms_test_data_into_s3():
-	bucket = f'emds-{os.environ["ENV"]}-data-20240917144025201600000001'
+def upload_dms_test_data_into_s3(context):
+	emds_data_bucket = dynamically_retrieve_bucket(search_string=f'emds-{os.environ["ENV"]}-data')
+	context['emds-data-bucket'] = emds_data_bucket
 	upload_test_file(
 		local_file_path='tests/test_data/dms_extraction/TestDatabase.bak',
-		bucket_name=bucket,
+		bucket_name=emds_data_bucket,
 		target_file_name='TestDatabase_b.bak',
 	)
 
 
 @given('the test data has been ingested into RDS')
-def ingest_test_data_into_rds(restore_sql, tasks_sql):
+def ingest_test_data_into_rds(restore_sql, tasks_sql, context):
 	server_endpoint = f'{os.environ["HOST_NAME"]},{os.environ["PORT"]}'
 	rds_connection = ConnectToRDS(
 		user=os.environ['USER_NAME'],
 		password=os.environ['PASSWORD'],
 		server_endpoint=server_endpoint,
 	)
-	arn = f'arn:aws:s3:::emds-{os.environ["ENV"]}-data-20240917144025201600000001/TestDatabase_b.bak'
+	arn = f'arn:aws:s3:::{context["emds-data-bucket"]}/TestDatabase_b.bak'
 	task_id = rds_connection.read_query(restore_sql.format(arn=arn))[0][0]
 
 	count = 0
