@@ -95,13 +95,10 @@ class ConnectToRDS(DatabaseConnection):
 		Yields:
 		    pyodbc.Cursor: A cursor object to execute queries.
 		"""
-		try:
-			self.create_connection()
-			cursor = self.connection.cursor()
-			yield cursor
-			self.connection.commit()
-		finally:
-			self.close_connection()
+		self.create_connection()
+		cursor = self.connection.cursor()
+		yield cursor
+		self.connection.commit()
 
 	def read_query(self, query: str) -> list:
 		"""Executes a read query and fetches all results.
