@@ -1,0 +1,27 @@
+[project]
+name = "electronic-monitoring-data-integration-tests"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.39.4",
+    "pandas>=2.3.1",
+    "pre-commit>=4.2.0",
+    "pyodbc>=5.2.0",
+    "pytest-bdd>=8.1.0",
+    "python-dotenv>=1.1.1",
+    "ruff>=0.12.4",
+]
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "INFO"
+
+[tool.ruff]
+line-length = 130
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "tab"
+docstring-code-format = true

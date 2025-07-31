@@ -2,9 +2,15 @@
 .terraform/
 coverage/
 venv/
+.venv
 env/
 .DS_STORE
 .vscode
 *.code-workspace
 *.sha256
 terraform.tfstate
+__pycache__/
+.env
+.pytest_cache
+.ruff_cache
+.python-version
