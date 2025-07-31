@@ -1,4 +1,4 @@
-# Electronic Monitoring Data Integratio Tests
+# Electronic Monitoring Data Integration Tests
 This repository contains the integration testing suite for Electronic Monitoring Data Integraton Tests.
 
 ## Prerequisites 
