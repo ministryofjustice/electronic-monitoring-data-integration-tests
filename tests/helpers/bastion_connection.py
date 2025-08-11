@@ -38,7 +38,7 @@ def create_ssh_tunnel_to_ec2_bastion():
 	try:
 		logging.info('Launching subprocess to create SSM port forwarding tunnel.')
 		tunnel = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		time.sleep(4)
+		time.sleep(40000)
 		__logging_ssh_output(tunnel)
 	except Exception as e:
 		raise RuntimeError('Failed to create port forward tunnel') from e

@@ -1,6 +1,7 @@
 import boto3
 import pandas as pd
 import io
+import logging
 
 
 def upload_test_file(local_file_path: str, bucket_name: str, target_file_name: str):
@@ -29,6 +30,25 @@ def download_file(bucket: str, key: str) -> pd.DataFrame:
 	client = __s3_client()
 	file = client.get_object(Bucket=bucket, Key=key)
 	return pd.read_parquet(io.BytesIO(file['Body'].read()))
+
+
+def delete_prefix(bucket: str, prefix: str):
+	"""Deletes all objects under a prefix
+
+	Args:
+		bucket (str): Target Bucket
+		prefix (str): prefix to delete objects
+	"""
+	client = __s3_client()
+	objects = client.list_objects_v2(Bucket=bucket, Prefix=prefix)
+
+	if 'Contents' in objects:
+		files_to_delete = [{'Key': obj['Key'] for obj in objects['Contents']}]
+
+		deleted_object_response = client.delete_objects(Bucket=bucket, Delete={'Objects': files_to_delete})
+		logging.info(f'Deleted: {deleted_object_response}')
+	else:
+		logging.warning(f'No objects found under {prefix} prefix')
 
 
 def dynamically_retrieve_bucket(search_string: str) -> str:

@@ -6,6 +6,7 @@ The framework uses the following core technologies:
 
 -   Python 3.12
 -   uv
+-   aws sso and profile
 
 ## Getting Started
 To get started with the testing framework, you need to have Python 3.12 and UV installed.
@@ -23,6 +24,8 @@ To get started with the testing framework, you need to have Python 3.12 and UV i
     - `USER_NAME`
     - `PASSWORD`
 
+- run `export AWS_PROFILE={your profile name}`
+- run `aws sso login`
 - run the following command to run all of the tests `uv run pytest` or if you want to run a specific file `uv run pytest {path to step file}`
 
 ## Linting
